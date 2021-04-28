@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kalantyr.Rss", "Kalantyr.Rs
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kalantyr.Rss.Model", "Kalantyr.Rss.Model\Kalantyr.Rss.Model.csproj", "{B611D01F-7962-4312-8C13-AE79A02B842A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kalantyr.Rss.Sources", "Kalantyr.Rss.Sources\Kalantyr.Rss.Sources.csproj", "{9DBB0DDB-EECD-4911-9B0F-A60672987A2B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{B611D01F-7962-4312-8C13-AE79A02B842A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B611D01F-7962-4312-8C13-AE79A02B842A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B611D01F-7962-4312-8C13-AE79A02B842A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DBB0DDB-EECD-4911-9B0F-A60672987A2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DBB0DDB-EECD-4911-9B0F-A60672987A2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DBB0DDB-EECD-4911-9B0F-A60672987A2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DBB0DDB-EECD-4911-9B0F-A60672987A2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

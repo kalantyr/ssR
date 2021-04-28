@@ -18,6 +18,7 @@
 
 	<ItemGroup>
     <ProjectReference Include="..\Kalantyr.Rss.Model\Kalantyr.Rss.Model.csproj" />
+    <ProjectReference Include="..\Kalantyr.Rss.Sources\Kalantyr.Rss.Sources.csproj" />
   </ItemGroup>
 
 </Project>

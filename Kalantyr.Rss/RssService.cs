@@ -1,32 +1,33 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Kalantyr.Rss.Model;
+using Kalantyr.Rss.Sources;
 
 namespace Kalantyr.Rss
 {
     public class RssService: IRssService
     {
-        public async Task<IReadOnlyCollection<Feed>> GetFeedsAsync(CancellationToken cancellationToken)
+        private readonly IReadOnlyCollection<IFeedSource> _sources;
+
+        public RssService(IHttpClientFactory httpClientFactory)
         {
-            var feed = new Feed
+            _sources = new IFeedSource[]
             {
-                Title = "Первый канал",
-                Items = new[]
-                {
-                    new FeedItem
-                    {
-                        Id = "1",
-                        Title = "Новость №1"
-                    },
-                    new FeedItem
-                    {
-                        Id = "2",
-                        Title = "Новость №2"
-                    }
-                }
+                new FeedSource1(), 
+                new SamoletNews(httpClientFactory),
             };
-            return new [] { feed };
+        }
+
+        public async Task<Feed> GetFeedAsync(string feedId, CancellationToken cancellationToken)
+        {
+            var source = _sources.FirstOrDefault(s => s.Id.Equals(feedId, StringComparison.InvariantCultureIgnoreCase));
+            if (source == null)
+                throw new Exception($"Feed \"{ feedId}\" not found");
+            return await source.GetFeedAsync(cancellationToken);
         }
     }
 }

@@ -7,5 +7,7 @@
         public string Title { get; set; }
 
         public FeedItem[] Items { get; set; } = new FeedItem[0];
+        
+        public string Id { get; set; }
     }
 }

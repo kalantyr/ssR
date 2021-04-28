@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Linq;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
+using Kalantyr.Rss.Model;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Kalantyr.Rss.Controllers
@@ -18,11 +19,19 @@ namespace Kalantyr.Rss.Controllers
         }
 
         [HttpGet]
-        [Route("feeds")]
-        public async Task<ActionResult<string>> GetFeedsAsync(CancellationToken cancellationToken)
+        [Route("t5/feed/{id}")]
+        public async Task<ActionResult<Feed>> GetFeedAsync(string id, CancellationToken cancellationToken)
         {
-            var feeds = await _rssService.GetFeedsAsync(cancellationToken);
-            return Ok(feeds.FirstOrDefault());
+            try
+            {
+                var feed = await _rssService.GetFeedAsync(id, cancellationToken);
+                return Ok(feed);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return base.StatusCode((int)HttpStatusCode.InternalServerError, e.GetBaseException().Message);
+            }
         }
     }
 }

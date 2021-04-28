@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.Net.Http;
+using Kalantyr.Rss.Sources;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
@@ -33,7 +35,11 @@ namespace Kalantyr.Rss
                 .AddControllers()
                 .AddNewtonsoftJson(opt => opt.SerializerSettings.NullValueHandling = NullValueHandling.Ignore);
 
-            services.AddSingleton<IRssService>(new RssService());
+            services
+                .AddHttpClient<SamoletNews>()
+                .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { UseDefaultCredentials = true });
+
+            services.AddSingleton<IRssService>(sProvider => new RssService(sProvider.GetService<IHttpClientFactory>()));
         }
     }
 }
