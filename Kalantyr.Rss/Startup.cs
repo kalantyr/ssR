@@ -36,6 +36,9 @@ namespace Kalantyr.Rss
                 .AddNewtonsoftJson(opt => opt.SerializerSettings.NullValueHandling = NullValueHandling.Ignore);
 
             services
+                .AddHttpClient<AbsRealty>()
+                .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { UseDefaultCredentials = true });
+            services
                 .AddHttpClient<SamoletNews>()
                 .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { UseDefaultCredentials = true });
 

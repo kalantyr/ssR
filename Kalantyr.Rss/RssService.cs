@@ -17,7 +17,7 @@ namespace Kalantyr.Rss
         {
             _sources = new IFeedSource[]
             {
-                new FeedSource1(), 
+                new AbsRealty(httpClientFactory), 
                 new SamoletNews(httpClientFactory),
             };
         }
@@ -28,6 +28,14 @@ namespace Kalantyr.Rss
             if (source == null)
                 throw new Exception($"Feed \"{ feedId}\" not found");
             return await source.GetFeedAsync(cancellationToken);
+        }
+
+        public IReadOnlyCollection<string> GetFeedIds(string feedId)
+        {
+            return _sources
+                .Select(fs => fs.Id)
+                .OrderBy(id => id)
+                .ToArray();
         }
     }
 }

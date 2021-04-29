@@ -19,7 +19,22 @@ namespace Kalantyr.Rss.Controllers
         }
 
         [HttpGet]
-        [Route("t5/feed/{id}")]
+        [Route("feeds")]
+        public ActionResult<string[]> GetFeedIds(string id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var feed = _rssService.GetFeedIds(id);
+                return Ok(feed);
+            }
+            catch (Exception e)
+            {
+                return base.StatusCode((int)HttpStatusCode.InternalServerError, e.GetBaseException().Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("t6/feed/{id}")]
         public async Task<ActionResult<Feed>> GetFeedAsync(string id, CancellationToken cancellationToken)
         {
             try
@@ -29,7 +44,6 @@ namespace Kalantyr.Rss.Controllers
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
                 return base.StatusCode((int)HttpStatusCode.InternalServerError, e.GetBaseException().Message);
             }
         }
