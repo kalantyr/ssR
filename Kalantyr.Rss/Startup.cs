@@ -35,6 +35,8 @@ namespace Kalantyr.Rss
                 .AddControllers()
                 .AddNewtonsoftJson(opt => opt.SerializerSettings.NullValueHandling = NullValueHandling.Ignore);
 
+            services.AddSingleton<IInvokeLogger>(new InvokeLogger());
+
             services
                 .AddHttpClient<AbsRealty>()
                 .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { UseDefaultCredentials = true });

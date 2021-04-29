@@ -12,10 +12,12 @@ namespace Kalantyr.Rss.Controllers
     public class RssController : ControllerBase
     {
         private readonly IRssService _rssService;
+        private readonly IInvokeLogger _invokeLogger;
 
-        public RssController(IRssService rssService)
+        public RssController(IRssService rssService, IInvokeLogger invokeLogger)
         {
             _rssService = rssService ?? throw new ArgumentNullException(nameof(rssService));
+            _invokeLogger = invokeLogger ?? throw new ArgumentNullException(nameof(invokeLogger));
         }
 
         [HttpGet]
@@ -39,6 +41,8 @@ namespace Kalantyr.Rss.Controllers
         {
             try
             {
+                _invokeLogger.Log();
+
                 var feed = await _rssService.GetFeedAsync(id, cancellationToken);
                 return Ok(feed);
             }
@@ -49,10 +53,27 @@ namespace Kalantyr.Rss.Controllers
         }
 
         [HttpGet]
-        [Route("t8/feed/{id}")]
+        [Route("t9/feed/{id}")]
         public async Task<ActionResult<Feed>> GetTestFeedAsync(string id, CancellationToken cancellationToken)
         {
             return await GetFeedAsync(id, cancellationToken);
+        }
+
+        [HttpGet]
+        [Route("statistics")]
+        public ActionResult<string[]> GetStatistics(string id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                return Ok(new []
+                {
+                    $"Average invoke interval (minutes): {Math.Round(_invokeLogger.AverageInvokeInterval.TotalMinutes, 1)}"
+                });
+            }
+            catch (Exception e)
+            {
+                return base.StatusCode((int)HttpStatusCode.InternalServerError, e.GetBaseException().Message);
+            }
         }
     }
 }

@@ -23,7 +23,7 @@ namespace Kalantyr.Rss.Sources
 
         public string Id { get; } = nameof(SamoletPhoto);
 
-        public string Name { get; } = "Самолет фото";
+        public string Name { get; } = "ЖК Некрасовка фото";
 
         public SamoletPhoto(IHttpClientFactory httpClientFactory)
         {
@@ -52,6 +52,7 @@ namespace Kalantyr.Rss.Sources
             {
                 Id = r.Id,
                 DatePublished = DateTimeOffset.ParseExact(r.Date, "yyyy-MM-dd", CultureInfo.CurrentCulture),
+                Title = r.ImageCount > 0 ? $"{r.ImageCount} photo" : "Video",
                 Url = "https://samolet.ru/project/nekrasovka"
             };
         }
@@ -67,5 +68,8 @@ namespace Kalantyr.Rss.Sources
         public string Id { get; set; }
 
         public string Date { get; set; }
+
+        [JsonProperty(PropertyName = "image_count")]
+        public int ImageCount { get; set; }
     }
 }
