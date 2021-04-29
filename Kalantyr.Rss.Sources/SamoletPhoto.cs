@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 
 namespace Kalantyr.Rss.Sources
 {
-    public class SamoletNews: IFeedSource
+    public class SamoletPhoto: IFeedSource
     {
         private readonly IHttpClientFactory _httpClientFactory;
 
@@ -21,11 +21,11 @@ namespace Kalantyr.Rss.Sources
             "военн"
         };
 
-        public string Id { get; } = nameof(SamoletNews);
+        public string Id { get; } = nameof(SamoletPhoto);
 
-        public string Name { get; } = "Самолет новости";
+        public string Name { get; } = "Самолет фото";
 
-        public SamoletNews(IHttpClientFactory httpClientFactory)
+        public SamoletPhoto(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
@@ -33,56 +33,39 @@ namespace Kalantyr.Rss.Sources
         public async Task<Feed> GetFeedAsync(CancellationToken cancellationToken)
         {
             var client = _httpClientFactory.CreateClient();
-            var s = await client.GetStringAsync("https://samolet.ru/api/news/?project=9", cancellationToken);
-            var data = JsonConvert.DeserializeObject<SamoletNewsData>(s);
+            var s = await client.GetStringAsync("https://samolet.ru/api/dynamic/?project=9", cancellationToken);
+            var data = JsonConvert.DeserializeObject<SamoletPhotoData>(s);
 
             return new Feed
             {
                 Id = Id,
                 Title = Name,
                 Items = data.Results
-                    .Where(Filter)
                     .Select(GetFeedItem)
                     .ToArray()
             };
         }
 
-        private static bool Filter(SamoletNewsRecord r)
-        {
-            if (IgnoreWords.Any(w => r.Title.Contains(w, StringComparison.InvariantCultureIgnoreCase)))
-                return false;
-
-            return true;
-        }
-
-        private static FeedItem GetFeedItem(SamoletNewsRecord r)
+        private static FeedItem GetFeedItem(SamoletPhotoRecord r)
         {
             return new FeedItem
             {
                 Id = r.Id,
-                Title = r.Title,
-                DatePublished = DateTimeOffset.ParseExact(r.Date, "dd.MM.yyyy", CultureInfo.CurrentCulture),
-                Url = r.Url,
-                ContentText = r.Description
+                DatePublished = DateTimeOffset.ParseExact(r.Date, "yyyy-MM-dd", CultureInfo.CurrentCulture),
+                Url = "https://samolet.ru/project/nekrasovka"
             };
         }
     }
 
-    public class SamoletNewsData
+    public class SamoletPhotoData
     {
-        public SamoletNewsRecord[] Results { get; set; }
+        public SamoletPhotoRecord[] Results { get; set; }
     }
 
-    public class SamoletNewsRecord
+    public class SamoletPhotoRecord
     {
         public string Id { get; set; }
 
-        public string Title { get; set; }
-
         public string Date { get; set; }
-        
-        public string Url { get; set; }
-
-        public string Description { get; set; }
     }
 }
