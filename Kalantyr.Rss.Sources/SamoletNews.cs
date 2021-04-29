@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Net.Http;
@@ -12,6 +13,13 @@ namespace Kalantyr.Rss.Sources
     public class SamoletNews: IFeedSource
     {
         private readonly IHttpClientFactory _httpClientFactory;
+
+        private static readonly IReadOnlyCollection<string> IgnoreWords = new[]
+        {
+            "продаж",
+            "сбербанк",
+            "военн"
+        };
 
         public string Id { get; } = nameof(SamoletNews);
 
@@ -34,14 +42,10 @@ namespace Kalantyr.Rss.Sources
                 {
                     Id = Id,
                     Title = Name,
-                    Items = data.Results.Select(r => new FeedItem
-                    {
-                        Id = r.Id,
-                        Title = r.Title,
-                        DatePublished = DateTimeOffset.ParseExact(r.Date, "dd.MM.yyyy", CultureInfo.CurrentCulture),
-                        Url = r.Url,
-                        ContentText = r.Description
-                    }).ToArray()
+                    Items = data.Results
+                        .Where(Filter)
+                        .Select(GetFeedItem)
+                        .ToArray()
                 };
             }
             catch (Exception e)
@@ -49,6 +53,26 @@ namespace Kalantyr.Rss.Sources
                 Console.WriteLine(e);
                 throw;
             }
+        }
+
+        private static bool Filter(SamoletNewsRecord r)
+        {
+            if (IgnoreWords.Any(w => r.Title.Contains(w, StringComparison.InvariantCultureIgnoreCase)))
+                return false;
+
+            return true;
+        }
+
+        private static FeedItem GetFeedItem(SamoletNewsRecord r)
+        {
+            return new FeedItem
+            {
+                Id = r.Id,
+                Title = r.Title,
+                DatePublished = DateTimeOffset.ParseExact(r.Date, "dd.MM.yyyy", CultureInfo.CurrentCulture),
+                Url = r.Url,
+                ContentText = r.Description
+            };
         }
     }
 

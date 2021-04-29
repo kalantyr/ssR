@@ -4,3 +4,9 @@
 /Kalantyr.Rss/obj
 /Kalantyr.Rss.Sources/bin
 /Kalantyr.Rss.Sources/obj
+/Kalantyr.Rss/*.user
+/.vs
+/Kalantyr.Rss.Tests/bin
+/Kalantyr.Rss.Tests/obj
+/*.user
+/*.pubxml
