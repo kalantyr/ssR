@@ -108,8 +108,10 @@ namespace Kalantyr.Rss.Sources
 
             return new FeedItem
             {
+                Id = (title + datePublished).GetHashCode().ToString(),
                 DatePublished = DateTimeOffset.Parse(datePublished),
-                Title = title
+                Title = title,
+                Url = "https://www.absrealty.ru/news"
             };
         }
     }

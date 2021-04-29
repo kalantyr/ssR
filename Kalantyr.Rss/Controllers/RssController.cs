@@ -34,7 +34,7 @@ namespace Kalantyr.Rss.Controllers
         }
 
         [HttpGet]
-        [Route("t6/feed/{id}")]
+        [Route("feed/{id}")]
         public async Task<ActionResult<Feed>> GetFeedAsync(string id, CancellationToken cancellationToken)
         {
             try
@@ -46,6 +46,13 @@ namespace Kalantyr.Rss.Controllers
             {
                 return base.StatusCode((int)HttpStatusCode.InternalServerError, e.GetBaseException().Message);
             }
+        }
+
+        [HttpGet]
+        [Route("t8/feed/{id}")]
+        public async Task<ActionResult<Feed>> GetTestFeedAsync(string id, CancellationToken cancellationToken)
+        {
+            return await GetFeedAsync(id, cancellationToken);
         }
     }
 }
