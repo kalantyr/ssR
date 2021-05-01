@@ -28,5 +28,7 @@ namespace Kalantyr.Rss.Model
                 _datePublished = new DateTimeOffset(value.Year, value.Month, value.Day, value.Hour, value.Minute, 0, value.Offset);
             }
         }
+
+        public string Icon { get; set; }
     }
 }

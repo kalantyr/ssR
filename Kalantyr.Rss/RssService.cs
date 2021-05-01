@@ -19,7 +19,8 @@ namespace Kalantyr.Rss
             {
                 new AbsRealty(httpClientFactory), 
                 new SamoletNews(httpClientFactory),
-                new SamoletPhoto(httpClientFactory)
+                new SamoletPhoto(httpClientFactory),
+                new AoC(httpClientFactory)
             };
         }
 

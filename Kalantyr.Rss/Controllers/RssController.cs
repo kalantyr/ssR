@@ -53,7 +53,7 @@ namespace Kalantyr.Rss.Controllers
         }
 
         [HttpGet]
-        [Route("t9/feed/{id}")]
+        [Route("t11/feed/{id}")]
         public async Task<ActionResult<Feed>> GetTestFeedAsync(string id, CancellationToken cancellationToken)
         {
             return await GetFeedAsync(id, cancellationToken);
@@ -65,10 +65,10 @@ namespace Kalantyr.Rss.Controllers
         {
             try
             {
-                return Ok(new []
-                {
-                    $"Average invoke interval (minutes): {Math.Round(_invokeLogger.AverageInvokeInterval.TotalMinutes, 1)}"
-                });
+                if (_invokeLogger is IStatistics statistics)
+                    return Ok(statistics.GetStatistics());
+                    
+                return Ok(new string[0]);
             }
             catch (Exception e)
             {
