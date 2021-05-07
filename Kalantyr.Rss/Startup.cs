@@ -46,6 +46,12 @@ namespace Kalantyr.Rss
             services
                 .AddHttpClient<SamoletPhoto>()
                 .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { UseDefaultCredentials = true });
+            services
+                .AddHttpClient<AoC>()
+                .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { UseDefaultCredentials = true });
+            services
+                .AddHttpClient<Novostroy>()
+                .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler { UseDefaultCredentials = true });
 
             services.AddSingleton<IRssService>(sProvider => new RssService(sProvider.GetService<IHttpClientFactory>()));
         }
